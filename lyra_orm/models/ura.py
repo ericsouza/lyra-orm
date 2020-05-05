@@ -47,6 +47,15 @@ class Ura(Base):
 
         return session.query(cls).filter_by(active=True).all()
 
+    @classmethod
+    def find_by_number(cls, number):
+        return session.query(cls).filter_by(number=number).first()
+
+    def save_to_db(self):
+        session.add(self)
+        session.commit()
+        session.close()
+
 
 class Transcription(Base):
     __tablename__ = "transcription"
@@ -57,6 +66,15 @@ class Transcription(Base):
 
     def __str__(self):
         return self.label
+
+    @classmethod
+    def find_by_label(cls, label):
+        return session.query(cls).filter_by(label=label).first()
+
+    def save_to_db(self):
+        session.add(self)
+        session.commit()
+        session.close()
 
 
 class UraAlarm(Base):
@@ -70,3 +88,17 @@ class UraAlarm(Base):
 
     def __str__(self):
         return self.label
+
+    @classmethod
+    def find_by_label(cls, label):
+        return session.query(cls).filter_by(label=label).first()
+
+    def save_to_db(self):
+        session.add(self)
+        session.commit()
+        session.close()
+
+    def delete_from_db(self):
+        session.delete(self)
+        session.commit()
+        session.close()

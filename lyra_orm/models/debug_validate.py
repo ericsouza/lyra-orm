@@ -1,4 +1,4 @@
-from lyra_orm.config import Base
+from lyra_orm.config import Base, session
 from sqlalchemy import Column, Integer, Boolean
 
 
@@ -9,3 +9,13 @@ class ValidateUras(Base):
 
     def __str__(self):
         return self.label
+
+    def save_to_db(self):
+        session.add(self)
+        session.commit()
+        session.close()
+
+    def delete_from_db(self):
+        session.delete(self)
+        session.commit()
+        session.close()

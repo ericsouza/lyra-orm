@@ -117,7 +117,9 @@ class ResultTest(Base):
     def save_to_db(self):
         session.add(self)
         session.commit()
+        session.close()
 
     def delete_from_db(self):
         session.delete(self)
         session.commit()
+        session.close()

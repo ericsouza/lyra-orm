@@ -15,3 +15,9 @@ else:
 Session = sessionmaker(bind=engine)
 session = Session()
 Base = declarative_base()
+
+
+def create_all():
+    global Base
+    global engine
+    Base.metadata.create_all(engine)
