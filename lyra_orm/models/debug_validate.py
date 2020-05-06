@@ -10,6 +10,10 @@ class ValidateUras(Base):
     def __str__(self):
         return self.label
 
+    @classmethod
+    def get_is_active(cls):
+        return session.query(cls).first().is_active
+
     def save_to_db(self):
         session.add(self)
         session.commit()
