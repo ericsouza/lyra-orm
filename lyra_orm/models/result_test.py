@@ -96,16 +96,8 @@ class ResultTest(Base):
     @classmethod
     def find_results(cls, uras=list(), n_last_results=3):
         results = {}
-        if not uras:
-            uras = Ura.find_all()
-            for ura in uras:
-                results_obj = ResultTest.find_by_to_number(
-                    ura.number, limit=n_last_results
-                )
-                test_results = [r.minimal_json() for r in results_obj]
-                results.update({ura.number: test_results})
-
-            return results
+        # in this case 'uras' is a list of phone numbers
+        uras = uras if uras else [u.number for u in Ura.find_all()]
 
         for ura in uras:
             results_obj = ResultTest.find_by_to_number(ura, limit=n_last_results)
