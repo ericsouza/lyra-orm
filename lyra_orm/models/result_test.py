@@ -79,25 +79,23 @@ class ResultTest(Base):
 
     @classmethod
     def get_last_unlarmed_faileds(cls):
-        uras = Ura.find_all()
         unlarmeds = {}
-        for ura in uras:
+        for ura in Ura.get_uras_numbers():
             results_obj = (
                 session.query(cls)
-                .filter_by(to_number=ura.number, success=False, alarmed_at=None)
+                .filter_by(to_number=ura, success=False, alarmed_at=None)
                 .order_by(ResultTest.start_at.desc())
                 .all()
             )
-            # ).limit(ura.alarm.minimum_failures).all()
-            unlarmeds.update({ura.number: results_obj})
+
+            unlarmeds.update({ura: results_obj})
 
         return unlarmeds
 
     @classmethod
     def find_results(cls, uras=list(), n_last_results=3):
         results = {}
-        # in this case 'uras' is a list of phone numbers
-        uras = uras if uras else [u.number for u in Ura.find_all()]
+        uras = uras if uras else Ura.get_uras_numbers()
 
         for ura in uras:
             results_obj = ResultTest.find_by_to_number(ura, limit=n_last_results)

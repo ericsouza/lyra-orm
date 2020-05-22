@@ -51,6 +51,10 @@ class Ura(Base):
     def find_by_number(cls, number):
         return session.query(cls).filter_by(number=number).first()
 
+    @classmethod
+    def get_uras_numbers(cls, actives=True):
+        return [u.number for u in Ura.find_all(actives=actives)]
+
     def save_to_db(self):
         session.add(self)
         session.commit()
