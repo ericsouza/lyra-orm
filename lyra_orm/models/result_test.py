@@ -43,7 +43,7 @@ class ResultTest(Base):
             "recording-sid": self.recording_sid,
             "recording-url": self.recording_url,
             "error-code": self.error_code,
-            "alarmed_at": self.alarmed_at,
+            "alarmed_at": str(self.alarmed_at),
         }
 
     def minimal_json(self):
@@ -56,7 +56,7 @@ class ResultTest(Base):
             "transcription": self.transcription,
             "start-at": str(self.start_at),
             "recording-duration": self.recording_duration,
-            "alarmed_at": self.alarmed_at,
+            "alarmed_at": str(self.alarmed_at),
         }
 
     @classmethod
