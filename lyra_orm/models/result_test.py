@@ -97,27 +97,34 @@ class ResultTest(Base):
         """
             SELECT count(success), date(start_at) from result_test where success=0 group by date(start_at) ORDER BY (start_at) DESC LIMIT 1
         """
-        failures = []
+        res = []
 
         with engine.connect() as con:
             failures = con.execute(
-                "SELECT COUNT(success), DATE(start_at) FROM result_test WHERE success=0 GROUP BY DATE(start_at) ORDER BY (start_at) DESC LIMIT 7"
+                f"SELECT COUNT(success), DATE(start_at) FROM result_test WHERE success=0 GROUP BY DATE(start_at) ORDER BY (start_at) DESC LIMIT {days_number}"
             )
 
-        return failures
+            for row in failures:
+                res.append(list(row))
+
+        return res
 
     @classmethod
     def get_sucesses_n_days(cls, days_number: int = 7):
         """
             SELECT count(success), date(start_at) from result_test where success=1 group by date(start_at) ORDER BY (start_at) DESC LIMIT 1
         """
-        successes = []
+        res = []
 
         with engine.connect() as con:
             successes = con.execute(
-                "SELECT COUNT(success), DATE(start_at) FROM result_test WHERE success=1 GROUP BY DATE(start_at) ORDER BY (start_at) DESC LIMIT 7"
+                f"SELECT COUNT(success), DATE(start_at) FROM result_test WHERE success=1 GROUP BY DATE(start_at) ORDER BY (start_at) DESC LIMIT {days_number}"
             )
-        return successes
+
+            for row in successes:
+                res.append(list(row))
+
+        return res
 
     @classmethod
     def find_results(cls, uras=list(), n_last_results=3):
