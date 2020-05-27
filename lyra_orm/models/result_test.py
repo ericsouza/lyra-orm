@@ -1,4 +1,4 @@
-from lyra_orm.config import Base, session
+from lyra_orm.config import Base, session, engine
 from lyra_orm.models import Ura
 from sqlalchemy import Column, String, Integer, Text, Boolean, DateTime, Float
 
@@ -93,6 +93,33 @@ class ResultTest(Base):
         return unlarmeds
 
     @classmethod
+    def get_failures_n_days(cls, days_number: int = 7):
+        """
+            SELECT count(success), date(start_at) from result_test where success=0 group by date(start_at) ORDER BY (start_at) DESC LIMIT 1
+        """
+        failures = []
+
+        with engine.connect() as con:
+            failures = con.execute(
+                "SELECT COUNT(success), DATE(start_at) FROM result_test WHERE success=0 GROUP BY DATE(start_at) ORDER BY (start_at) DESC LIMIT 7"
+            )
+
+        return failures
+
+    @classmethod
+    def get_sucesses_n_days(cls, days_number: int = 7):
+        """
+            SELECT count(success), date(start_at) from result_test where success=1 group by date(start_at) ORDER BY (start_at) DESC LIMIT 1
+        """
+        successes = []
+
+        with engine.connect() as con:
+            successes = con.execute(
+                "SELECT COUNT(success), DATE(start_at) FROM result_test WHERE success=1 GROUP BY DATE(start_at) ORDER BY (start_at) DESC LIMIT 7"
+            )
+        return successes
+
+    @classmethod
     def find_results(cls, uras=list(), n_last_results=3):
         results = {}
         uras = uras if uras else Ura.get_uras_numbers()
@@ -113,3 +140,6 @@ class ResultTest(Base):
         session.delete(self)
         session.commit()
         session.close()
+
+
+# ResultTest.get_status_n_days()
