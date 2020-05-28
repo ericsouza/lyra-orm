@@ -93,7 +93,7 @@ class ResultTest(Base):
         return unlarmeds
 
     @classmethod
-    def get_failures_n_days(cls, days_number: int = 7):
+    def get_failures_per_day(cls, from_date, to_date):
         """
             SELECT count(success), date(start_at) from result_test where success=0 group by date(start_at) ORDER BY (start_at) DESC LIMIT 1
         """
@@ -101,7 +101,7 @@ class ResultTest(Base):
 
         with engine.connect() as con:
             failures = con.execute(
-                f"SELECT COUNT(success), DATE(start_at) FROM result_test WHERE success=0 GROUP BY DATE(start_at) ORDER BY (start_at) DESC LIMIT {days_number}"
+                f"SELECT COUNT(success), DATE(start_at) FROM result_test WHERE success=0 AND DATE(start_at) >= DATE('{from_date}') AND DATE(start_at) <= DATE('{to_date}') GROUP BY DATE(start_at) ORDER BY (start_at) DESC"
             )
 
             for row in failures:
@@ -110,15 +110,16 @@ class ResultTest(Base):
         return res
 
     @classmethod
-    def get_sucesses_n_days(cls, days_number: int = 7):
+    def get_successes_per_day(cls, from_date, to_date):
         """
-            SELECT count(success), date(start_at) from result_test where success=1 group by date(start_at) ORDER BY (start_at) DESC LIMIT 1
+            SELECT COUNT(success), DATE(start_at) FROM result_test WHERE success=0 AND DATE(start_at) >= DATE('2020-03-18') AND DATE(start_at) <= DATE('2020-03-20') GROUP BY DATE(start_at) ORDER BY (start_at) DESC
         """
+
         res = []
 
         with engine.connect() as con:
             successes = con.execute(
-                f"SELECT COUNT(success), DATE(start_at) FROM result_test WHERE success=1 GROUP BY DATE(start_at) ORDER BY (start_at) DESC LIMIT {days_number}"
+                f"SELECT COUNT(success), DATE(start_at) FROM result_test WHERE success=1 AND DATE(start_at) >= DATE('{from_date}') AND DATE(start_at) <= DATE('{to_date}') GROUP BY DATE(start_at) ORDER BY (start_at) DESC"
             )
 
             for row in successes:
