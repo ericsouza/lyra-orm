@@ -101,7 +101,7 @@ class ResultTest(Base):
 
         with engine.connect() as con:
             failures = con.execute(
-                f"SELECT COUNT(success), DATE(start_at) FROM result_test WHERE success=false AND DATE(start_at) >= DATE('{from_date}') AND DATE(start_at) <= DATE('{to_date}') GROUP BY DATE(start_at) ORDER BY (start_at) DESC"
+                f"SELECT COUNT(success), DATE(start_at) FROM result_test WHERE success=FALSE AND DATE(start_at) >= DATE('{from_date}') AND DATE(start_at) <= DATE('{to_date}') GROUP BY success, DATE(start_at) ORDER BY DATE(start_at) DESC"
             )
 
             for row in failures:
@@ -119,7 +119,7 @@ class ResultTest(Base):
 
         with engine.connect() as con:
             successes = con.execute(
-                f"SELECT COUNT(success), DATE(start_at) FROM result_test WHERE success=true AND DATE(start_at) >= DATE('{from_date}') AND DATE(start_at) <= DATE('{to_date}') GROUP BY DATE(start_at) ORDER BY (start_at) DESC"
+                f"SELECT COUNT(success), DATE(start_at) FROM result_test WHERE success=TRUE AND DATE(start_at) >= DATE('{from_date}') AND DATE(start_at) <= DATE('{to_date}') GROUP BY success, DATE(start_at) ORDER BY DATE(start_at) DESC"
             )
 
             for row in successes:
