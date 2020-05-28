@@ -21,7 +21,6 @@ class User(Base):
     @classmethod
     def find_by_id(cls, _id):
         user = session.query(cls).filter_by(id=_id).first()
-        print(user.username)
         return user
 
     @property
